@@ -44,3 +44,45 @@ function handleDrawEvent(){
    var v2 = new Vector3([x2, y2, 0.0]);
    drawVector(v2, "blue");
 }
+
+function handleDrawOperationEvent(){
+   var x = document.getElementById('xcoord').value;
+   var y = document.getElementById('ycoord').value;
+   var x2 = document.getElementById('xcoord2').value;
+   var y2 = document.getElementById('ycoord2').value;
+
+   // Clear Canvas
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+   // Black blackground
+   ctx.fillStyle = 'black'; // Set color to black
+   ctx.fillRect(0, 0, 400, 400);
+
+   // Draw lines
+   var v1 = new Vector3([x, y, 0.0]);
+   drawVector(v1, "red");
+   var v2 = new Vector3([x2, y2, 0.0]);
+   drawVector(v2, "blue");
+
+   var operator = document.getElementById('opt').value;
+   // Vector operations
+   if (operator == "Add"){
+      v1.add(v2);
+      drawVector(v1, "green");
+   } else if (operator == "Subtract"){
+      v1.sub(v2);
+      drawVector(v1, "green");
+   } else if (operator == "Multiply"){
+      var s = document.getElementById('scalar').value;
+      v1.mul(s);
+      drawVector(v1, "green");
+      v2.mul(s);
+      drawVector(v2, "green");
+   } else if (operator == "Divide"){
+      var s = document.getElementById('scalar').value;
+      v1.div(s);
+      drawVector(v1, "green");
+      v2.div(s);
+      drawVector(v2, "green");
+   }
+ }
