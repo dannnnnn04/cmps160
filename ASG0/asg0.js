@@ -93,7 +93,9 @@ function handleDrawOperationEvent(){
       var v2n = v2.normalize();
       drawVector(v2n, "green");
    } else if (operator == "Ang"){
-      console.log("Angle: " + (angleBetween(v1, v2)));
+      console.log("Angle: " + (angleBetween(v1, v2)).toFixed(2));
+   } else if (operator == "Area"){
+      console.log("Area of this triangle: " + (areaTriangle(v1, v2)).toFixed(2));
    }
  }
 
@@ -105,4 +107,13 @@ function angleBetween(v1, v2){
    var alpha = Math.acos(d/(m1*m2)); // Radians
    alpha *= 180/Math.PI;
    return alpha;
+}
+
+function areaTriangle(v1, v2){
+   var a = Vector3.cross(v1, v2);
+   var v1 = new Vector3([a[0], a[1], a[2]]);
+
+   var b = v1.magnitude()/2;
+
+   return b;
 }

@@ -119,7 +119,7 @@ class Vector3 {
         for(var i = 0; i < 3; ++i){
            d += o1[i]*o2[i];
         }
-        
+
         // Don't delete the return statement.
         return d;
     }
@@ -132,7 +132,13 @@ class Vector3 {
         // Insert your code here.
         // This function should create and return a new vector.
         let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
+        var o1 = other1.elements;
+        var o2 = other2.elements;
 
+        v3[0] = (o1[1]*o2[2]) - (o1[2]*o2[1]);
+        v3[1] = -((o1[0]*o2[2]) - (o1[2]*o2[0]));
+        v3[2] = (o1[0]*o2[1]) - (o1[1]*o2[0]);
+        
         // Don't delete the return statement.
         return v3;
     }
