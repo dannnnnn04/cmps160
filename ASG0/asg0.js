@@ -29,8 +29,8 @@ function drawVector(v, color){
 function handleDrawEvent(){
    var x = document.getElementById('xcoord').value;
    var y = document.getElementById('ycoord').value;
-
-
+   var x2 = document.getElementById('xcoord2').value;
+   var y2 = document.getElementById('ycoord2').value;
    // Clear Canvas
    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -41,6 +41,6 @@ function handleDrawEvent(){
    // Draw new lines
    var v1 = new Vector3([x, y, 0.0]);
    drawVector(v1, "red");
-
-
+   var v2 = new Vector3([x2, y2, 0.0]);
+   drawVector(v2, "blue");
 }
