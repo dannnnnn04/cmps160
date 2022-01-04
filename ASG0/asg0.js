@@ -92,5 +92,17 @@ function handleDrawOperationEvent(){
       drawVector(v1n, "green");
       var v2n = v2.normalize();
       drawVector(v2n, "green");
+   } else if (operator == "Ang"){
+      console.log("Angle: " + (angleBetween(v1, v2)));
    }
  }
+
+function angleBetween(v1, v2){
+   var m1 = v1.magnitude();
+   var m2 = v2.magnitude();
+   var d = Vector3.dot(v1, v2);
+
+   var alpha = Math.acos(d/(m1*m2)); // Radians
+   alpha *= 180/Math.PI;
+   return alpha;
+}

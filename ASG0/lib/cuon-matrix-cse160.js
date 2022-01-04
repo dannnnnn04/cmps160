@@ -113,7 +113,13 @@ class Vector3 {
     static dot(other1, other2) {
         // Insert your code here.
         let d = 0; // Modify this line to calculate this vector's magnitude.
+        var o1 = other1.elements;
+        var o2 = other2.elements;
 
+        for(var i = 0; i < 3; ++i){
+           d += o1[i]*o2[i];
+        }
+        
         // Don't delete the return statement.
         return d;
     }
