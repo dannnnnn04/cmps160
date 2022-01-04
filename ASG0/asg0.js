@@ -15,11 +15,7 @@ function main() {
 
   // Black background
   ctx.fillStyle = 'black'; // Set color to black
-  ctx.fillRect(0, 0, 400, 400);        // Fill a rectangle with the color
-
-  // Draw new lines
-   var v1 = new Vector3([2.25, 2.25, 0.0]);
-   drawVector(v1,"red");
+  ctx.fillRect(0, 0, 400, 400);        // Fill a rectangle with the colors
 }
 
 function drawVector(v, color){
@@ -28,4 +24,23 @@ function drawVector(v, color){
    ctx.moveTo(canvas.width/2, canvas.height/2);
    ctx.lineTo(200+v.elements[0]*20, 200-v.elements[1]*20, v.elements[2]*20);
    ctx.stroke();
+}
+
+function handleDrawEvent(){
+   var x = document.getElementById('xcoord').value;
+   var y = document.getElementById('ycoord').value;
+
+
+   // Clear Canvas
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+   // Black background
+   ctx.fillStyle = 'black'; // Set color to black
+   ctx.fillRect(0, 0, 400, 400);
+
+   // Draw new lines
+   var v1 = new Vector3([x, y, 0.0]);
+   drawVector(v1, "red");
+
+
 }
