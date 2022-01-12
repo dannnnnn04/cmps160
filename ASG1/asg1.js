@@ -1,5 +1,10 @@
-// ColoredPoint.js (c) 2012 matsuda
-// Vertex shader program
+// Daniel John S. Carig
+// asg1
+
+// Global Variables
+var gl;
+var canvas;
+
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
   'void main() {\n' +
@@ -15,16 +20,25 @@ var FSHADER_SOURCE =
   '  gl_FragColor = u_FragColor;\n' +
   '}\n';
 
-function main() {
-  // Retrieve <canvas> element
-  var canvas = document.getElementById('webgl');
+  // Get Canvas and GL Context ======================================
+  function setupWebGL(){
+     // Retrieve <canvas> element
+     canvas = document.getElementById('asg1');
+     if (!canvas) {
+         console.log('Failed to retrieve the <canvas> element');
+         return;
+     }
 
-  // Get the rendering context for WebGL
-  var gl = getWebGLContext(canvas);
-  if (!gl) {
-    console.log('Failed to get the rendering context for WebGL');
-    return;
+     // Rendering context for WebGL
+     gl = getWebGLContext(canvas);
+     if(!gl){
+         console.log('Failed to get the rendering context for WebGL');
+         return;
+     }
   }
+
+function main() {
+  setupWebGL();
 
   // Initialize shaders
   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
