@@ -4,6 +4,8 @@
 // Global Variables
 var gl;
 var canvas;
+var a_Position;
+var u_FragColor;
 
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
@@ -35,30 +37,34 @@ var FSHADER_SOURCE =
          console.log('Failed to get the rendering context for WebGL');
          return;
      }
-  }
+   }
+
+  // Compile Shader Programs and connect js to GLSL =================
+  function connectVariablesToGLSL(){
+   // Initialize shaders ==========================================
+   if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+       console.log('Failed to intialize shaders.');
+       return;
+   }
+
+   // Get the storage location of attribute variable ==============
+   a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+   if (a_Position < 0) {
+       console.log('Failed to get the storage location of a_Position');
+       return;
+   }
+
+   // Get the storage location of attribute variable ==============
+   u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
+   if (!u_FragColor) {
+       console.log('Failed to get u_FragColor');
+       return;
+   }
+ }
 
 function main() {
   setupWebGL();
-
-  // Initialize shaders
-  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
-    console.log('Failed to intialize shaders.');
-    return;
-  }
-
-  // // Get the storage location of a_Position
-  var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-  if (a_Position < 0) {
-    console.log('Failed to get the storage location of a_Position');
-    return;
-  }
-
-  // Get the storage location of u_FragColor
-  var u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
-  if (!u_FragColor) {
-    console.log('Failed to get the storage location of u_FragColor');
-    return;
-  }
+  connectVariablesToGLSL();
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = function(ev){ click(ev, gl, canvas, a_Position, u_FragColor) };
