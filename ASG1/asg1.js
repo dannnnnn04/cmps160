@@ -100,7 +100,7 @@ function click(ev) {
   renderAllShapes();
 }
 
-// Get Coordinates =================================================
+// Get Coordinates ================================================
 function convertCoordinatesEventToGL(ev){
    var x = ev.clientX; // x coordinate of a mouse pointer
    var y = ev.clientY; // y coordinate of a mouse pointer
@@ -116,7 +116,7 @@ function convertCoordinatesEventToGL(ev){
    return [x,y];
 }
 
-// renderAllShapes =================================================
+// renderAllShapes ================================================
 function renderAllShapes(){
    // Clear <canvas>
    gl.clear(gl.COLOR_BUFFER_BIT);
