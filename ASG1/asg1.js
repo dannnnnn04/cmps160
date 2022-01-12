@@ -7,6 +7,9 @@ var canvas;
 var a_Position;
 var u_FragColor;
 
+// UI
+var g_selectedColor = [1.0, 1.0, 1.0, 1.0];
+
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
   'void main() {\n' +
@@ -62,9 +65,20 @@ var FSHADER_SOURCE =
    }
  }
 
+ // HTML ============================================================
+ function addActionsForHtmlUI(){
+
+   // Color Slider Events
+   document.getElementById('red').addEventListener('mouseup',     function() { g_selectedColor[0] = this.value*0.1; });
+   document.getElementById('green').addEventListener('mouseup',   function() { g_selectedColor[1] = this.value*0.1; });
+   document.getElementById('blue').addEventListener('mouseup',    function() { g_selectedColor[2] = this.value*0.1; });
+
+ }
+
 function main() {
   setupWebGL();
   connectVariablesToGLSL();
+  addActionsForHtmlUI();
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = function(ev){
@@ -87,14 +101,17 @@ function click(ev) {
 
   // Store the coordinates to g_points array
   g_points.push([x, y]);
+
+  g_colors.push(g_selectedColor.slice());
+
   // Store the coordinates to g_points array
-  if (x >= 0.0 && y >= 0.0) {      // First quadrant
-    g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
-  } else if (x < 0.0 && y < 0.0) { // Third quadrant
-    g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
-  } else {                         // Others
-    g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
-  }
+  //if (x >= 0.0 && y >= 0.0) {      // First quadrant
+    //g_colors.push([1.0, 0.0, 0.0, 1.0]);  // Red
+  //} else if (x < 0.0 && y < 0.0) { // Third quadrant
+    //g_colors.push([0.0, 1.0, 0.0, 1.0]);  // Green
+  //} else {                         // Others
+    //g_colors.push([1.0, 1.0, 1.0, 1.0]);  // White
+  //}
 
   // Draw every shape that is suppose to be in the canvas
   renderAllShapes();
