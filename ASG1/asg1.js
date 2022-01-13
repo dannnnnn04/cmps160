@@ -8,9 +8,14 @@ var a_Position;
 var u_FragColor;
 var u_Size;
 
+// Constants
+const POINT = 0;
+const TRIANGLE = 1;
+
 // Globals related to UI elements
 var g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 var g_selectedSize = 5;
+var g_selectedType = POINT;
 var drag = false;
 
 // Array
@@ -83,6 +88,8 @@ var FSHADER_SOURCE =
  function addActionsForHtmlUI(){
    // Button Events
    document.getElementById('clear').onclick     = function() { g_shapesList = []; renderAllShapes(); };
+   document.getElementById('square').onclick    = function() { g_selectedType = POINT;    };
+   document.getElementById('triangle').onclick  = function() { g_selectedType = TRIANGLE; };
 
    // Color Slider Events
    document.getElementById('red').addEventListener('mouseup',     function() { g_selectedColor[0] = this.value*0.1; });
@@ -125,7 +132,12 @@ function click(ev) {
     // Extract the event click and return it in WebGL coordinates
     var [x,y] = convertCoordinatesEventToGL(ev);
 
-    let point = new Triangle();
+    var point;
+    if (g_selectedType==POINT) {
+      point = new Point();
+    } else {
+      point = new Triangle();
+    }
     point.position = [x,y];
     point.color = g_selectedColor.slice();
     point.size = g_selectedSize;
