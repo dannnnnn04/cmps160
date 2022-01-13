@@ -43,7 +43,6 @@ var FSHADER_SOURCE =
 
      // Rendering context for WebGL
      gl = getWebGLContext(canvas);
-     //gl = canvas.getContext('asg1', { preserveDrawingBuffer: true });
      if(!gl){
          console.log('Failed to get the rendering context for WebGL');
          return;
@@ -98,16 +97,6 @@ function main() {
   setupWebGL();
   connectVariablesToGLSL();
   addActionsForHtmlUI();
-
-  // Register function (event handler) to be called on a mouse press
-  //canvas.onmousedown = function(ev){
-    //click(ev)
-  //};
-  //canvas.onmousemove = function(ev){
-    //if(ev.buttons == 1){
-      //click(ev)
-    //}
-  //};
 
   // Register function (event handler) to be called on a mouse press
   canvas.onmousedown = function(ev){
