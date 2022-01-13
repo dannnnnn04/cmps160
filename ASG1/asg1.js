@@ -125,7 +125,7 @@ function click(ev) {
     // Extract the event click and return it in WebGL coordinates
     var [x,y] = convertCoordinatesEventToGL(ev);
 
-    let point = new Point();
+    let point = new Triangle();
     point.position = [x,y];
     point.color = g_selectedColor.slice();
     point.size = g_selectedSize;
