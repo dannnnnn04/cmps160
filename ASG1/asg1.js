@@ -80,6 +80,8 @@ var FSHADER_SOURCE =
 
  // Set up actions for the HTML UI elements ============================================================
  function addActionsForHtmlUI(){
+   // Button Events
+   document.getElementById('clear').onclick     = function() { g_shapesList = []; renderAllShapes(); };
 
    // Color Slider Events
    document.getElementById('red').addEventListener('mouseup',     function() { g_selectedColor[0] = this.value*0.1; });
