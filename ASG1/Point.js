@@ -26,7 +26,11 @@ class Point{
     gl.uniform1f(u_Size, size);
 
     // Draw
-    gl.drawArrays(gl.POINTS, 0, 1);
+    //gl.drawArrays(gl.POINTS, 0, 1);
+
+    var d = size/20.0;
+    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]-d/2, xy[1]+d/2, xy[0]+d/2, xy[1]+d/2]);
+    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]+d/2, xy[1]-d/2, xy[0]+d/2, xy[1]+d/2]);
 
   }
 }
