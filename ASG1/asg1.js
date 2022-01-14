@@ -17,6 +17,7 @@ const CIRCLE = 2;
 var g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 var g_selectedSize = 5;
 var g_selectedType = POINT;
+var g_selectedsCount = 12; // segment count
 var drag = false;
 
 // Array
@@ -100,6 +101,7 @@ var FSHADER_SOURCE =
 
    // Size and Seg Slider Events
    document.getElementById('size').addEventListener('mouseup',    function() { g_selectedSize = this.value });
+   document.getElementById('sCount').addEventListener('mouseup',  function() { g_selectedsCount = this.value; });
  }
 
 function main() {
@@ -142,7 +144,9 @@ function click(ev) {
       point = new Triangle();
    } else {
       point = new Circle();
+      point.sCount = g_selectedsCount;
    }
+   
     point.position = [x,y];
     point.color = g_selectedColor.slice();
     point.size = g_selectedSize;
