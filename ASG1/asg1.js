@@ -18,6 +18,7 @@ var g_selectedColor = [1.0, 1.0, 1.0, 1.0];
 var g_selectedSize = 5;
 var g_selectedType = POINT;
 var g_selectedsCount = 12; // segment count
+var g_outline = 0;
 var drag = false;
 
 // Array
@@ -90,9 +91,12 @@ var FSHADER_SOURCE =
  function addActionsForHtmlUI(){
    // Button Events
    document.getElementById('clear').onclick     = function() { g_shapesList = []; renderAllShapes(); };
-   document.getElementById('square').onclick    = function() { g_selectedType = POINT;    };
-   document.getElementById('triangle').onclick  = function() { g_selectedType = TRIANGLE; };
-   document.getElementById('circle').onclick    = function() { g_selectedType = CIRCLE; };
+   document.getElementById('square').onclick    = function() { g_selectedType = POINT;    g_outline = 0;};
+   document.getElementById('triangle').onclick  = function() { g_selectedType = TRIANGLE; g_outline = 0;};
+   document.getElementById('circle').onclick    = function() { g_selectedType = CIRCLE;   g_outline = 0;};
+   document.getElementById('sTrace').onclick    = function() { g_selectedType = POINT;    g_outline = 1;};
+   document.getElementById('tTrace').onclick    = function() { g_selectedType = TRIANGLE; g_outline = 1;};
+   document.getElementById('cTrace').onclick    = function() { g_selectedType = CIRCLE;   g_outline = 1;};
 
    // Color Slider Events
    document.getElementById('red').addEventListener('mouseup',     function() { g_selectedColor[0] = this.value*0.1; });
@@ -146,11 +150,11 @@ function click(ev) {
       point = new Circle();
       point.sCount = g_selectedsCount;
    }
-   
+
     point.position = [x,y];
     point.color = g_selectedColor.slice();
     point.size = g_selectedSize;
-
+    point.outline = g_outline;
     g_shapesList.push(point);
 
   // Draw every shape that is suppose to be in the canvas

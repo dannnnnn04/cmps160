@@ -4,6 +4,7 @@ class Point{
       this.position = [0.0, 0.0, 0.0];
       this.color = [1.0, 1.0, 1.0, 1.0];
       this.size = 5.0;
+      this.outline = 0;
    }
 
    // Render this shape
@@ -29,8 +30,8 @@ class Point{
     //gl.drawArrays(gl.POINTS, 0, 1);
 
     var d = size/20.0;
-    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]-d/2, xy[1]+d/2, xy[0]+d/2, xy[1]+d/2]);
-    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]+d/2, xy[1]-d/2, xy[0]+d/2, xy[1]+d/2]);
+    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]-d/2, xy[1]+d/2, xy[0]+d/2, xy[1]+d/2], this.outline);
+    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]+d/2, xy[1]-d/2, xy[0]+d/2, xy[1]+d/2], this.outline);
 
   }
 }

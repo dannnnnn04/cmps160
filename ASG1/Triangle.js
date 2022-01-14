@@ -4,6 +4,7 @@ class Triangle{
       this.position = [0.0, 0.0, 0.0];
       this.color = [1.0, 1.0, 1.0, 1.0];
       this.size = 5.0;
+      this.outline = 0;
    }
 
    // Render this shape
@@ -28,11 +29,11 @@ class Triangle{
     //var d = this.size/200.0; // delta
     //drawTriangle( [xy[0], xy[1], xy[0]+d, xy[1], xy[0], xy[1]+d] );
     var d = size/20.0;
-    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]+d/2, xy[1]-d/2, xy[0], xy[1]+d/2]);
+    drawTriangle([xy[0]-d/2, xy[1]-d/2, xy[0]+d/2, xy[1]-d/2, xy[0], xy[1]+d/2], this.outline);
   }
 }
 
-function drawTriangle(vertices) {
+function drawTriangle(vertices, outline) {
 //  var vertices = new Float32Array([
 //    0, 0.5,   -0.5, -0.5,   0.5, -0.5
 //  ]);
@@ -62,6 +63,9 @@ function drawTriangle(vertices) {
   // Enable the assignment to a_Position variable
   gl.enableVertexAttribArray(a_Position);
 
-  gl.drawArrays(gl.TRIANGLES, 0, n);
-  //return n;
+  if (outline == 0){
+      gl.drawArrays(gl.TRIANGLES, 0, n);
+   } else if(outline == 1){
+      gl.drawArrays(gl.LINE_LOOP, 0, n);
+   }
 }
