@@ -40,7 +40,7 @@ var FSHADER_SOURCE =
   '  gl_FragColor = u_FragColor;\n' +
   '}\n';
 
-  // Get Canvas and GL Context ======================================
+  // ================== Get Canvas and GL Context ====================
   function setupWebGL(){
      // Retrieve <canvas> element
      canvas = document.getElementById('asg1');
@@ -57,22 +57,22 @@ var FSHADER_SOURCE =
      }
    }
 
-  // Compile Shader Programs and connect js to GLSL =================
+  // ======== Compile Shader Programs and connect js to GLSL =========
   function connectVariablesToGLSL(){
-   // Initialize shaders ==========================================
+   // Initialize shaders
    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
        console.log('Failed to intialize shaders.');
        return;
    }
 
-   // Get the storage location of attribute variable ==============
+   // Get the storage location of attribute variable
    a_Position = gl.getAttribLocation(gl.program, 'a_Position');
    if (a_Position < 0) {
        console.log('Failed to get the storage location of a_Position');
        return;
    }
 
-   // Get the storage location of attribute variable ==============
+   // Get the storage location of attribute variable 
    u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
    if (!u_FragColor) {
        console.log('Failed to get u_FragColor');
@@ -87,7 +87,7 @@ var FSHADER_SOURCE =
 
  }
 
- // Set up actions for the HTML UI elements ============================================================
+ // ============================== Set up actions for the HTML UI elements ==============================
  function addActionsForHtmlUI(){
    // Button Events
    document.getElementById('clear').onclick     = function() { g_shapesList = []; renderAllShapes(); };
@@ -161,7 +161,7 @@ function click(ev) {
   renderAllShapes();
 }
 
-// Get Coordinates ================================================
+// ======================== Get Coordinates ========================
 function convertCoordinatesEventToGL(ev){
    var x = ev.clientX; // x coordinate of a mouse pointer
    var y = ev.clientY; // y coordinate of a mouse pointer
@@ -174,7 +174,7 @@ function convertCoordinatesEventToGL(ev){
    return [x,y];
 }
 
-// renderAllShapes ================================================
+// ======================== renderAllShapes ========================
 function renderAllShapes(){
    // Clear <canvas>
    gl.clear(gl.COLOR_BUFFER_BIT);
