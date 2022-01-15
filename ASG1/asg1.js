@@ -72,7 +72,7 @@ var FSHADER_SOURCE =
        return;
    }
 
-   // Get the storage location of attribute variable 
+   // Get the storage location of attribute variable
    u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
    if (!u_FragColor) {
        console.log('Failed to get u_FragColor');
@@ -97,6 +97,26 @@ var FSHADER_SOURCE =
    document.getElementById('sTrace').onclick    = function() { g_selectedType = POINT;    g_outline = 1;};
    document.getElementById('tTrace').onclick    = function() { g_selectedType = TRIANGLE; g_outline = 1;};
    document.getElementById('cTrace').onclick    = function() { g_selectedType = CIRCLE;   g_outline = 1;};
+   document.getElementById('draw').onclick  	  = function() {
+                                // Specify the color for clearing <canvas>
+																gl.clearColor(0.0, 0.0, 0.0, 1.0);
+																// Clear <canvas>
+																gl.clear(gl.COLOR_BUFFER_BIT);
+																//drawTriangle([0, 0.5,   -0.5, -0.5,   0.5, -0.5]);
+																drawTriangle([0, 0,   -0.25, -0.25,   0.25, -0.25]);
+																drawTriangle([-0.5, 0,   -0.75, -0.25,   -0.25, -0.25]);
+																drawTriangle([0.5, 0,   0.25, -0.25,   0.75, -0.25]);
+																drawTriangle([-0.25, 0.25,   -0.5, 0,   0, 0]);
+																drawTriangle([0.25, 0.25,   0, 0,   0.5, 0]);
+																drawTriangle([0, 0.5,   -0.25, 0.25,   0.25, 0.25]);
+
+																drawTriangle([0, -0.5,  -0.25, -0.25,  0.25, -0.25])
+																drawTriangle([-0.5, -0.5,  -0.75, -0.25,  -0.25, -0.25])
+																drawTriangle([0.5, -0.5,  0.25, -0.25,  0.75, -0.25])
+																drawTriangle([-0.25, -0.75,  -0.5, -0.5,  0, -0.5])
+																drawTriangle([0.25, -0.75,  0, -0.5,  0.5, -0.5])
+																drawTriangle([0,-1,  -0.25,-0.75,  0.25,-0.75])
+															};
 
    // Color Slider Events
    document.getElementById('red').addEventListener('mouseup',     function() { g_selectedColor[0] = this.value*0.1; });
@@ -107,6 +127,40 @@ var FSHADER_SOURCE =
    document.getElementById('size').addEventListener('mouseup',    function() { g_selectedSize = this.value });
    document.getElementById('sCount').addEventListener('mouseup',  function() { g_selectedsCount = this.value; });
  }
+
+ function drawTriangle(vertices) {
+//  var vertices = new Float32Array([
+//    0, 0.5,   -0.5, -0.5,   0.5, -0.5
+//  ]);
+  var n = 3; // The number of vertices
+
+  // Create a buffer object
+  var vertexBuffer = gl.createBuffer();
+  if (!vertexBuffer) {
+    console.log('Failed to create the buffer object');
+    return -1;
+  }
+
+  // Bind the buffer object to target
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+  //gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+  var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+  if (a_Position < 0) {
+    console.log('Failed to get the storage location of a_Position');
+    return -1;
+  }
+  // Assign the buffer object to a_Position variable
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+
+  // Enable the assignment to a_Position variable
+  gl.enableVertexAttribArray(a_Position);
+
+  gl.drawArrays(gl.TRIANGLES, 0, n);
+  //return n;
+}
 
 function main() {
   setupWebGL();
