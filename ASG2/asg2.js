@@ -7,15 +7,17 @@ var canvas;
 var a_Position;
 var u_FragColor;
 
-
+// Globals related UI elements
+var g_globalAngle=0;
 
 
 // Vertex shader program ==========================================
 var VSHADER_SOURCE =
     'attribute vec4 a_Position;\n' +
     'uniform mat4 u_ModelMatrix;\n' +
+    'uniform mat4 u_GlobalRotateMatrix;\n' +
     'void main() {\n' +
-    ' gl_Position = u_ModelMatrix * a_Position;\n' +
+    ' gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;\n' +
     '}\n';
 
 // Fragment shader program ========================================
@@ -28,6 +30,8 @@ var FSHADER_SOURCE =
 
 // HTML ============================================================
 function addActionsForHtmlUI(){
+
+  document.getElementById('camera').addEventListener('mousemove', function() { g_globalAngle = this.value; renderAllShapes(); });
 
 
 }
@@ -80,6 +84,13 @@ function connectVariablesToGLSL(){
     return;
   }
 
+  // Get the storage location of u_GlobalRotateMatrix
+  u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
+  if (!u_GlobalRotateMatrix) {
+    console.log('Failed to get u_GlobalRotateMatrix');
+    return;
+  }
+
   //Set an initial value for this matrix to identity
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
@@ -107,11 +118,12 @@ function renderAllShapes(){
   //Check the time at the start of this function
   var startTime = performance.now();
 
+  // Pass the matrix to u_ModelMatrix attribute
+  var globalRotMat = new Matrix4().rotate(g_globalAngle, 0,1,0);
+  gl.uniformMatrix4fv(u_GlobalRotateMatrix, false, globalRotMat.elements);
+
    // Clear <canvas>
    gl.clear(gl.COLOR_BUFFER_BIT);
-
-   // Draw a test Triangle
-   drawTriangle3D( [-1.0,0.0,0.0,  -0.5,-1.0,0.0,  0.0,0.0,0.0] );
 
    // Draw the body cube
    var body = new Cube();
@@ -127,6 +139,14 @@ function renderAllShapes(){
    leftArm.matrix.rotate(45, 0,0,1);
    leftArm.matrix.scale(0.25, .7, .5);
    leftArm.render();
+
+   // Test box
+   var box = new Cube();
+   box.color = [1,0,1,1];
+   box.matrix.translate(0,0,-.50,0);
+   box.matrix.rotate(-30,1,0,0);
+   box.matrix.scale(.5,.5,.5);
+   box.render();
 
    // Check the time at the end of the function, and show on web page
    var duration = performance.now() - startTime;
