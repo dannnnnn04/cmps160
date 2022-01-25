@@ -13,9 +13,9 @@ var u_FragColor;
 // Vertex shader program ==========================================
 var VSHADER_SOURCE =
     'attribute vec4 a_Position;\n' +
-
+    'uniform mat4 u_ModelMatrix;\n' +
     'void main() {\n' +
-    ' gl_Position = a_Position;\n' +
+    ' gl_Position = u_ModelMatrix * a_Position;\n' +
     '}\n';
 
 // Fragment shader program ========================================
@@ -48,7 +48,7 @@ function setupWebGL(){
        return;
    }
 
-   gl.enable(gl.DEPTH_TEST);
+   //gl.enable(gl.DEPTH_TEST);
 }
 
 // Compile Shader Programs and connect js to GLSL =================
@@ -73,13 +73,18 @@ function connectVariablesToGLSL(){
        return;
    }
 
+   // Get the storage location of u_ModelMatrix
+   u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+   if (!u_ModelMatrix) {
+    console.log('Failed to get u_ModelMatrix');
+    return;
+  }
 
-       return;
-   }
+  //Set an initial value for this matrix to identity
+  var identityM = new Matrix4();
+  gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
 
-
-
-//}
+}
 
 // Main ===========================================================
 function main() {
@@ -108,10 +113,20 @@ function renderAllShapes(){
    // Draw a test Triangle
    drawTriangle3D( [-1.0,0.0,0.0,  -0.5,-1.0,0.0,  0.0,0.0,0.0] );
 
-   //Draw a Cube
+   // Draw the body cube
    var body = new Cube();
    body.color = [1.0,0.0,0.0,1.0];
+   body.matrix.translate(-.25, -.5, 0.0);
+   body.matrix.scale(0.5, 1, .5);
    body.render();
+
+   // Draw a left arm
+   var leftArm = new Cube();
+   leftArm.color = [1,1,0,1];
+   leftArm.matrix.setTranslate(.7, 0, 0.0);
+   leftArm.matrix.rotate(45, 0,0,1);
+   leftArm.matrix.scale(0.25, .7, .5);
+   leftArm.render();
 
    // Check the time at the end of the function, and show on web page
    var duration = performance.now() - startTime;
