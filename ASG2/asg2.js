@@ -11,6 +11,12 @@ var u_FragColor;
 var g_globalAngle=0;
 var g_yellowAngle=0;
 var g_magentaAngle=0;
+var g_yellowAnimation=false;
+var g_magentaAnimation=false;
+
+// Animation
+var g_startTime=performance.now()/1000.0;
+var g_seconds=performance.now()/1000.0-g_startTime;
 
 // Vertex shader program ==========================================
 var VSHADER_SOURCE =
@@ -32,7 +38,16 @@ var FSHADER_SOURCE =
 // HTML ============================================================
 function addActionsForHtmlUI(){
 
+  // Button Events
+  document.getElementById('animate_on').onclick = function() {g_yellowAnimation = true;};
+  document.getElementById('animate_off').onclick = function() {g_yellowAnimation = false;};
+  document.getElementById('animate_on2').onclick = function() {g_magentaAnimation = true;};
+   document.getElementById('animate_off2').onclick = function() {g_magentaAnimation = false;};
+
+  //Size Slider Events
   document.getElementById('camera').addEventListener('mousemove', function() { g_globalAngle = this.value; renderAllShapes(); });
+
+  // Color Slider Events
   document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderAllShapes(); });
   document.getElementById('magentaSlide').addEventListener('mousemove', function() { g_magentaAngle = this.value; renderAllShapes(); });
 }
@@ -113,8 +128,6 @@ function main() {
    requestAnimationFrame(tick)
 } // end of main
 
-var g_startTime=performance.now()/1000.0;
-var g_seconds=performance.now()/1000.0-g_startTime;
 
 // Called by browser repeatedly whenever its timeout
 function tick() {
@@ -122,11 +135,24 @@ function tick() {
   g_seconds=performance.now()/1000.0-g_startTime;
   console.log(g_seconds);
 
+  // Update Animation angles
+  updateAnimationAngles();
+
   // Draw everything
   renderAllShapes();
 
   // Tell the browser to update again when it has time
   requestAnimationFrame(tick);
+}
+
+// Update the angles of everything if currently animated
+function updateAnimationAngles(){
+   if(g_yellowAnimation){
+      g_yellowAngle = (45*Math.sin(g_seconds));
+   }
+   if(g_magentaAnimation){
+      g_magentaAngle = (45*Math.sin(3*g_seconds));
+   }
 }
 
 // Draw every shape that is supposed to be in the canvas
@@ -156,8 +182,15 @@ function renderAllShapes(){
    yellow.color = [1,1,0,1];
    yellow.matrix.setTranslate(0, -.5, 0.0);
    yellow.matrix.rotate(-5, 1,0,0);
-   //yellow.matrix.rotate(-g_yellowAngle, 0,0,1);
-   yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
+
+   yellow.matrix.rotate(-g_yellowAngle, 0,0,1);
+
+   //if (g_yellowAnimation){
+      //yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
+   //} else {
+      //yellow.matrix.rotate(-g_yellowAngle, 0,0,1);
+   //}
+
    var yellowCoordinatesMat=new Matrix4(yellow.matrix);
    yellow.matrix.scale(0.25, .7, .5);
    yellow.matrix.translate(-.5,0,0);
@@ -171,9 +204,6 @@ function renderAllShapes(){
    magenta.matrix.rotate(g_magentaAngle,0,0,1);
    magenta.matrix.scale(.3,.3,.3);
    magenta.matrix.translate(-.5,0, -0.001);
-   //box.matrix.translate(-.1,.1,.0,0);
-   //box.matrix.rotate(-30,1,0,0);
-   //box.matrix.scale(.2,.4,.2);
    magenta.render();
 
    // Check the time at the end of the function, and show on web page
@@ -181,6 +211,7 @@ function renderAllShapes(){
    sendTextToHTML( " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration), 'numdot');
 
 }
+
 
 // Set the text of a HTML element
 function sendTextToHTML(text, htmlID) {
