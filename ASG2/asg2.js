@@ -9,6 +9,7 @@ var u_FragColor;
 
 // Globals related UI elements
 var g_globalAngle=0;
+var g_yellowAngle=0;
 
 
 // Vertex shader program ==========================================
@@ -31,8 +32,8 @@ var FSHADER_SOURCE =
 // HTML ============================================================
 function addActionsForHtmlUI(){
 
+  document.getElementById('yellowSlide').addEventListener('mousemove', function() { g_yellowAngle = this.value; renderAllShapes(); });
   document.getElementById('camera').addEventListener('mousemove', function() { g_globalAngle = this.value; renderAllShapes(); });
-
 
 }
 
@@ -140,7 +141,7 @@ function renderAllShapes(){
    leftArm.color = [1,1,0,1];
    leftArm.matrix.setTranslate(0, -.5, 0.0);
    leftArm.matrix.rotate(-5, 1,0,0);
-   leftArm.matrix.rotate(0, 0,0,1);
+   leftArm.matrix.rotate(-g_yellowAngle, 0,0,1);
    leftArm.matrix.scale(0.25, .7, .5);
    leftArm.matrix.translate(-.5,0,0);
    leftArm.render();
