@@ -62,7 +62,7 @@ function setupWebGL(){
    }
 
    // Rendering context for WebGL
-   gl = getWebGLContext(canvas);
+   gl = getWebGLContext(canvas);   
    if(!gl){
        console.log('Failed to get the rendering context for WebGL');
        return;
@@ -208,7 +208,7 @@ function renderAllShapes(){
 
    // Check the time at the end of the function, and show on web page
    var duration = performance.now() - startTime;
-   sendTextToHTML( " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration), 'numdot');
+   sendTextToHTML( " ms: " + Math.floor(duration) + " fps: " + Math.floor(10000/duration)/10, "numdot");
 
 }
 
