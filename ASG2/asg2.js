@@ -62,7 +62,7 @@ function setupWebGL(){
    }
 
    // Rendering context for WebGL
-   gl = getWebGLContext(canvas);   
+   gl = getWebGLContext(canvas);
    if(!gl){
        console.log('Failed to get the rendering context for WebGL');
        return;
@@ -125,7 +125,7 @@ function main() {
 
    // Render
    //renderAllShapes();
-   requestAnimationFrame(tick)
+   requestAnimationFrame(tick);
 } // end of main
 
 
