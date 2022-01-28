@@ -7,24 +7,22 @@
 
 <body onload="main()">
    <!-- Create a canvas (400x400) Note: size and origin -->
-   <canvas id="asg2" width="400" height="400" style="border:1px solid #000000;">
+   <canvas id="asg2" width="500" height="500" style="border:1px solid #000000;">
       Please use a browser that supports "canvas"
    </canvas>
 
-   <p id="numdot"> AAA </p>
+   <br><br>
    <!-- Camera and Joint -->
-   <p>
-   Magenta <input type="range" min="-45" max="45" value="0" class="slider" id="magentaSlide"></p>
-   <p>
-   Yellow <input type="range" min="-45" max="45" value="0" class="slider" id="yellowSlide"></p>
    <label for="camera">Camera Angle:</label>
    <input type="range" id="camera" name="camera" min="0" max="360" value="0" class = "slider"><br>
+   <label for="joint">1st joint:</label>
+   <input type="range" id="joint" name="joint" min="0" max="25" value="0" class = "slider"><br>
+   <label for="joint">2nd joint:</label>
+   <input type="range" id="joint2" name="joint2" min="0" max="8" value="0" class = "slider"><br>
    <label for="animate_on">Animation: </label>
    <button type="button" id="animate_on">ON</button>
    <button type="button" id="animate_off">OFF</button><br>
-   <label for="animate_on">Animation: </label>
-   <button type="button" id="animate_on2">ON</button>
-   <button type="button" id="animate_off2">OFF</button><br>
+   <p>FYI: It's a goat..</p>
 
    <!-- javascript files containing functions for WebGL -->
    <script src="lib/webgl-utils.js"></script>
@@ -32,14 +30,13 @@
    <script src="lib/cuon-utils.js"></script>
    <script src="lib/cuon-matrix.js"></script>
 
-   <!-- Add our asg js file -->
+   <!-- asg2 js files -->
    <script type=text/javascript src="Triangle.js"></script>
-
+   <script type=text/javascript src="Point.js"></script>
    <script type=text/javascript src="Circle.js"></script>
    <script type=text/javascript src="Cube.js"></script>
-
    <script type=text/javascript src="asg2.js"></script>
-
+   <script type=text/javascript src="renderAllShapes.js"></script>
 
 </body>
 </html>
