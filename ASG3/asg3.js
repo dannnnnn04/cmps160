@@ -12,6 +12,8 @@ var u_ModelMatrix;
 var u_ProjectionMatrix;
 var u_ViewMatrix;
 var u_GlobalRotateMatrix;
+var u_Sampler0;
+var u_whichTexture;
 
 // Globals related UI elements
 var g_globalAngle=0;
@@ -47,10 +49,17 @@ var VSHADER_SOURCE =`
        varying vec2 v_UV;
        uniform vec4 u_FragColor;
        uniform sampler2D u_Sampler0;
+       uniform int u_whichTexture;
        void main() {
-         gl_FragColor = u_FragColor;
-         gl_FragColor = vec4(v_UV, 1.0, 1.0);
-         gl_FragColor = texture2D(u_Sampler0, v_UV);
+         if(u_whichTexture == -2){
+           gl_FragColor = u_FragColor;                  // Use color
+         } else if (u_whichTexture == -1){
+           gl_FragColor = vec4(v_UV, 1.0, 1.0);         // Use UV debug color
+         } else if(u_whichTexture == 0){
+           gl_FragColor = texture2D(u_Sampler0, v_UV);  // Use texture0
+         } else {
+           gl_FragColor = vec4(1,.2,.2,1);              // Error, put Redish
+         }
        }`
 
 // HTML ============================================================
@@ -110,6 +119,14 @@ function connectVariablesToGLSL(){
       console.log('Failed to get the storage location of a_UV');
       return;
   }
+
+  u_whichTexture = gl.getUniformLocation(gl.program, 'u_whichTexture');
+  if (!u_whichTexture) {
+      console.log('Failed to get u_whichTexture');
+      return;
+  }
+
+
    // Get the storage location of u_FragColor
    u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
    if (!u_FragColor) {
@@ -168,7 +185,7 @@ function initTextures() {
   image.src = 'sky.jpg';
 
   // Add more texture loading
-  
+
   return true;
 }
 
@@ -267,6 +284,7 @@ function renderAllShapes(){
    // Draw the body cube
    var body = new Cube();
    body.color = [1.0,0.0,0.0,1.0];
+   body.textureNum=0;
    body.matrix.translate(-.25, -.75, 0.0);
    body.matrix.rotate(-5,1,0,0);
    body.matrix.scale(0.5, .3, .5);
@@ -277,15 +295,7 @@ function renderAllShapes(){
    yellow.color = [1,1,0,1];
    yellow.matrix.setTranslate(0, -.5, 0.0);
    yellow.matrix.rotate(-5, 1,0,0);
-
    yellow.matrix.rotate(-g_yellowAngle, 0,0,1);
-
-   //if (g_yellowAnimation){
-      //yellow.matrix.rotate(45*Math.sin(g_seconds), 0,0,1);
-   //} else {
-      //yellow.matrix.rotate(-g_yellowAngle, 0,0,1);
-   //}
-
    var yellowCoordinatesMat=new Matrix4(yellow.matrix);
    yellow.matrix.scale(0.25, .7, .5);
    yellow.matrix.translate(-.5,0,0);
@@ -294,6 +304,7 @@ function renderAllShapes(){
    // Test box
    var magenta = new Cube();
    magenta.color = [1,0,1,1];
+   magenta.textureNum=0;
    magenta.matrix = yellowCoordinatesMat;
    magenta.matrix.translate(0, 0.65, 0);
    magenta.matrix.rotate(g_magentaAngle,0,0,1);
