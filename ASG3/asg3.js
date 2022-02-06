@@ -46,9 +46,11 @@ var VSHADER_SOURCE =`
        precision mediump float;
        varying vec2 v_UV;
        uniform vec4 u_FragColor;
+       uniform sampler2D u_Sampler0;
        void main() {
          gl_FragColor = u_FragColor;
          gl_FragColor = vec4(v_UV, 1.0, 1.0);
+         gl_FragColor = texture2D(u_Sampler0, v_UV);
        }`
 
 // HTML ============================================================
@@ -141,10 +143,60 @@ function connectVariablesToGLSL(){
     return;
   }
 
+  // Get the storage location of u_Sampler0
+  u_Sampler0 = gl.getUniformLocation(gl.program, 'u_Sampler0');
+  if (!u_Sampler0) {
+    console.log('Failed to get the storage location of u_Sampler0');
+    return false;
+  }
+
   //Set an initial value for this matrix to identity
   var identityM = new Matrix4();
   gl.uniformMatrix4fv(u_ModelMatrix, false, identityM.elements);
 
+}
+
+function initTextures() {
+  var image = new Image();  // Create the image object
+  if (!image) {
+    console.log('Failed to create the image object');
+    return false;
+  }
+  // Register the event handler to be called on loading an image
+  image.onload = function(){ sendImageToTEXTURE0(image); };
+  // Tell the browser to load an image
+  image.src = 'sky.jpg';
+
+  // Add more texture loading
+  
+  return true;
+}
+
+function sendImageToTEXTURE0(image) {
+  var texture = gl.createTexture();   // Create a texture object
+  if (!texture) {
+    console.log('Failed to create the texture object');
+    return false;
+  }
+
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // Flip the image's y axis
+  // Enable texture unit0
+  gl.activeTexture(gl.TEXTURE0);
+  // Bind the texture object to the target
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  // Set the texture parameters
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  // Set the texture image
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+  // Set the texture unit 0 to the sampler
+  gl.uniform1i(u_Sampler0, 0);
+
+  //gl.clear(gl.COLOR_BUFFER_BIT);   // Clear <canvas>
+
+  //gl.drawArrays(gl.TRIANGLE_STRIP, 0, n); // Draw the rectangle
+  console.log('finished loadTexture');
 }
 
 // Main ===========================================================
@@ -152,6 +204,8 @@ function main() {
    setupWebGL();
    connectVariablesToGLSL();
    addActionsForHtmlUI();
+
+   initTextures();
 
    // Specify the color for clearing <canvas>
    gl.clearColor(0.0, 0.0, 0.0, 1.0);
