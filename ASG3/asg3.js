@@ -5,7 +5,13 @@
 var gl;
 var canvas;
 var a_Position;
+var a_UV;
 var u_FragColor;
+var u_Size;
+var u_ModelMatrix;
+var u_ProjectionMatrix;
+var u_ViewMatrix;
+var u_GlobalRotateMatrix;
 
 // Globals related UI elements
 var g_globalAngle=0;
@@ -19,21 +25,31 @@ var g_startTime=performance.now()/1000.0;
 var g_seconds=performance.now()/1000.0-g_startTime;
 
 // Vertex shader program ==========================================
-var VSHADER_SOURCE =
-    'attribute vec4 a_Position;\n' +
-    'uniform mat4 u_ModelMatrix;\n' +
-    'uniform mat4 u_GlobalRotateMatrix;\n' +
-    'void main() {\n' +
-    ' gl_Position = u_GlobalRotateMatrix * u_ModelMatrix * a_Position;\n' +
-    '}\n';
+var VSHADER_SOURCE =`
+   precision mediump float;
+   attribute vec4 a_Position;
+   attribute vec2 a_UV;
+   varying vec2 v_UV;
+   uniform mat4 u_ModelMatrix;
+   uniform mat4 u_GlobalRotateMatrix;
+   uniform mat4 u_ViewMatrix;
+   uniform mat4 u_ProjectionMatrix;
 
-// Fragment shader program ========================================
-var FSHADER_SOURCE =
-    'precision mediump float;\n' +
-    'uniform vec4 u_FragColor;\n' +
-    'void main() {\n' +
-    '  gl_FragColor = u_FragColor;\n' + // Set the point color (red)
-    '}\n';
+   void main() {
+
+      gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_GlobalRotateMatrix * u_ModelMatrix * a_Position;
+      v_UV = a_UV;
+   }`
+
+   // Fragment shader program ========================================
+   var FSHADER_SOURCE =`
+       precision mediump float;
+       varying vec2 v_UV;
+       uniform vec4 u_FragColor;
+       void main() {
+         gl_FragColor = u_FragColor;
+         gl_FragColor = vec4(v_UV, 1.0, 1.0);
+       }`
 
 // HTML ============================================================
 function addActionsForHtmlUI(){
@@ -87,7 +103,12 @@ function connectVariablesToGLSL(){
        return;
    }
 
-   // Get the storage location of attribute variable ==============
+   a_UV = gl.getAttribLocation(gl.program, 'a_UV');
+   if (a_UV < 0) {
+      console.log('Failed to get the storage location of a_UV');
+      return;
+  }
+   // Get the storage location of u_FragColor
    u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
    if (!u_FragColor) {
        console.log('Failed to get u_FragColor');
@@ -105,6 +126,18 @@ function connectVariablesToGLSL(){
   u_GlobalRotateMatrix = gl.getUniformLocation(gl.program, 'u_GlobalRotateMatrix');
   if (!u_GlobalRotateMatrix) {
     console.log('Failed to get u_GlobalRotateMatrix');
+    return;
+  }
+
+  u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+  if (!u_ViewMatrix) {
+    console.log('Failed to get u_ViewMatrix');
+    return;
+  }
+
+  u_ProjectionMatrix = gl.getUniformLocation(gl.program, 'u_ProjectionMatrix');
+  if (!u_ProjectionMatrix) {
+    console.log('Failed to get u_ProjectionMatrix');
     return;
   }
 
@@ -160,6 +193,14 @@ function renderAllShapes(){
 
   //Check the time at the start of this function
   var startTime = performance.now();
+
+  // Pass the projection matrix
+  var projMat = new Matrix4();
+  gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
+
+  // Pass the view matrix
+  var viewMat =new Matrix4();
+  gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the matrix to u_ModelMatrix attribute
   var globalRotMat = new Matrix4().rotate(g_globalAngle, 0,1,0);
