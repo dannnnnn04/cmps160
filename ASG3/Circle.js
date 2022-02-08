@@ -4,8 +4,7 @@ class Circle{
       this.position = [0.0, 0.0, 0.0];
       this.color = [1.0, 1.0, 1.0, 1.0];
       this.size = 5.0;
-      //this.sCount = 12;
-      this.sCount = 10;
+      this.sCount = 12;
    }
 
    render() {
@@ -17,10 +16,9 @@ class Circle{
       gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
 
       // Draw
-      var delta = this.size/200.0;
-      //var delta = size/40.0;
-      //var angleStep = 360/this.sCount*.5;
-      var angleStep = 360/this.segments;
+      var delta = size/40.0;
+      var angleStep = 360/this.sCount*.5;
+
       for(var angle = 0; angle <= 360; angle += angleStep){
          let centerPt = [xy[0], xy[1]];
          let angle1 = angle;
