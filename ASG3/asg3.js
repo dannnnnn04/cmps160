@@ -222,6 +222,8 @@ function main() {
    connectVariablesToGLSL();
    addActionsForHtmlUI();
 
+   //document.onkeydown = keydown;
+
    initTextures();
 
    // Specify the color for clearing <canvas>
@@ -259,6 +261,21 @@ function updateAnimationAngles(){
    }
 }
 
+//function keydown(ev){
+//   if(ev.keyCode==39) { // Right Arrow or D
+//      g_eye[0] += 0.2;
+//   } if (ev.keyCode==37){ // Left Arrow or A
+//      g_eye[0] -= 0.2;
+//   }
+
+//   renderAllShapes();
+//   console.log(ev.keyCode);
+//}
+
+//var g_eye=[0,0,3];
+//var g_at=[0,0,-100];
+//var g_up=[0,1,0];
+
 // Draw every shape that is supposed to be in the canvas
 function renderAllShapes(){
 
@@ -267,10 +284,13 @@ function renderAllShapes(){
 
   // Pass the projection matrix
   var projMat = new Matrix4();
+  //projMat.setPerspective(50, canvas.width/canvas.height, 1, 100);
   gl.uniformMatrix4fv(u_ProjectionMatrix, false, projMat.elements);
 
   // Pass the view matrix
   var viewMat =new Matrix4();
+  //viewMat.setLookAt(g_eye[0], g_eye[1], g_eye[2], g_at[0], g_at[1], g_at[2]);
+  //viewMat.setLookAt(0,0,3,  0,0,-100  0,1,0); // (eye, at, up)
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMat.elements);
 
   // Pass the matrix to u_ModelMatrix attribute
